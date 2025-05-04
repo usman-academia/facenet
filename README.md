@@ -14,8 +14,8 @@ This project is a complete facial recognition pipeline that includes training an
 
 ## 🗂️ Project Structure
 
-├── face-app-flask/
-│ └── bin
+├── face-app-flask/..
+│ └── bin..
 │ │ ├── recognition.py              # Main logic is stored here
 │ └── images
 │ │ ├── test1.jpeg                  # Image to evaluate the model
