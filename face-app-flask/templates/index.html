@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Face Recognition</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+      integrity="sha512-HHsOCYqAXq5Sm4g+tb72eE7xqdu9qZ9E+2pOQxv5PZ0RvU/w8kX3nurT9eUc6BfQHoR2eXkKqHj7gMJF3hKZBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+
+  <body
+    class="min-h-screen bg-gradient-to-br from-gray-200 via-gray-100 to-gray-50 flex items-center justify-center p-6"
+  >
+    <!-- Identify Window -->
+    <div
+      id="identify-window"
+      class="max-w-md w-full bg-white rounded-2xl shadow-lg p-8 transition-all duration-300"
+    >
+      <div class="text-center mb-6">
+        <i class="fas fa-user-circle text-indigo-500 text-6xl"></i>
+        <h1 class="mt-4 text-2xl font-semibold text-gray-800">
+          Face Recognition
+        </h1>
+        <p class="mt-1 text-gray-500">Upload an image to identify the person</p>
+      </div>
+      <form method="POST" enctype="multipart/form-data" class="space-y-4">
+        <label class="block">
+          <span class="sr-only">Choose file</span>
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            required
+            class="block w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-indigo-300"
+          />
+        </label>
+        <button
+          type="submit"
+          class="w-full py-3 rounded-full bg-indigo-600 text-white font-medium hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-300 transition"
+        >
+          <i class="fas fa-magnifying-glass mr-2"></i> Identify
+        </button>
+      </form>
+      {% if name %}
+      <div class="mt-6 text-center">
+        <h2 class="text-lg font-medium text-gray-800">
+          Identified as: <span class="text-indigo-600">{{ name }}</span>
+        </h2>
+        <div class="mt-4 inline-block">
+          <img
+            src="{{ url_for('static', filename='uploads/' + user_image) }}"
+            alt="User Image"
+            class="w-40 h-40 object-cover rounded-full border-4 border-indigo-100 shadow-md"
+          />
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Save New User Window -->
+    <div
+      id="save-window"
+      class="hidden max-w-md w-full bg-white rounded-2xl shadow-lg p-8 transition-all duration-300"
+    >
+      <div class="text-center mb-6">
+        <i class="fas fa-user-plus text-blue-500 text-6xl"></i>
+        <h1 class="mt-4 text-2xl font-semibold text-gray-800">Add New User</h1>
+        <p class="mt-1 text-gray-500">Provide details to save a new face</p>
+      </div>
+      <form
+        id="save-form"
+        action="/save"
+        method="POST"
+        enctype="multipart/form-data"
+        class="space-y-4"
+      >
+        <div>
+          <label class="block text-gray-700">Full Name</label>
+          <input
+            type="text"
+            name="username"
+            required
+            class="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300"
+            placeholder="Enter full name"
+          />
+        </div>
+        <div>
+          <label class="block text-gray-700">Profile Image</label>
+          <input
+            type="file"
+            name="file"
+            accept="image/*"
+            required
+            class="mt-1 block w-full text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+        </div>
+        <button
+          type="submit"
+          class="w-full py-3 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+        >
+          <i class="fas fa-save mr-2"></i> Save User
+        </button>
+      </form>
+    </div>
+
+    <!-- Toggle Button -->
+    <div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 mb-4">
+      <button
+        id="save-button"
+        class="bg-blue-500 text-white font-bold py-2 px-6 rounded-full shadow-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
+      >
+        <i class="fas fa-save"></i> Save New User
+      </button>
+    </div>
+
+    <script>
+      const saveButton = document.getElementById('save-button');
+      const identifyWindow = document.getElementById('identify-window');
+      const saveWindow = document.getElementById('save-window');
+      let isSaveWindowVisible = false;
+      saveButton.addEventListener('click', () => {
+        isSaveWindowVisible = !isSaveWindowVisible;
+        if (isSaveWindowVisible) {
+          identifyWindow.classList.add('hidden');
+          saveWindow.classList.remove('hidden');
+          saveButton.innerHTML = '<i class="fas fa-magnifying-glass"></i> Predict';
+        } else {
+          saveWindow.classList.add('hidden');
+          identifyWindow.classList.remove('hidden');
+          saveButton.innerHTML = '<i class="fas fa-save"></i> Save New User';
+        }
+      });
+
+      // Show alert on successful save
+      {% if saved_username %}
+      window.addEventListener('DOMContentLoaded', () => {
+        alert(`User "{{ saved_username }}" saved successfully!`);
+      });
+      {% endif %}
+    </script>
+  </body>
+</html>
