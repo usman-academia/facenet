@@ -15,22 +15,22 @@ This project is a complete facial recognition pipeline that includes training an
 ## 🗂️ Project Structure
 
 ├── face-app-flask/<br>
-│ └── bin..
-│ │ ├── recognition.py              # Main logic is stored here
-│ └── images
-│ │ ├── test1.jpeg                  # Image to evaluate the model
-│ │ ├── test2.jpeg                  # Image to evaluate the model
-│ │ ├── test3.jpeg                  # Image to evaluate the model
-│ └── static/
-│ │ └── uploads/
-│ │ │ ├── temp.txt                  # You can delete temp.txt
-│ └── templates/
-│ │ ├── index.html                  # Code for Front End
-│ └── app.py                        # Run this
-│ └── requirements.txt              # Modules required
-├── README.md
-├── facenet-loading-script.ipynb    # Test the model after training
-├── facenet-training-script.ipynb   # Use this to train it yourself
+│ └── bin<br>
+│ │ ├── recognition.py              # Main logic is stored here<br>
+│ └── images<br>
+│ │ ├── test1.jpeg                  # Image to evaluate the model<br>
+│ │ ├── test2.jpeg                  # Image to evaluate the model<br>
+│ │ ├── test3.jpeg                  # Image to evaluate the model<br>
+│ └── static/<br>
+│ │ └── uploads/<br>
+│ │ │ ├── temp.txt                  # You can delete temp.txt<br>
+│ └── templates/<br>
+│ │ ├── index.html                  # Code for Front End<br>
+│ └── app.py                        # Run this<br>
+│ └── requirements.txt              # Modules required<br>
+├── README.md<br>
+├── facenet-loading-script.ipynb    # Test the model after training<br>
+├── facenet-training-script.ipynb   # Use this to train it yourself<br>
 
 ---
 
